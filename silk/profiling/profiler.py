@@ -126,9 +126,9 @@ class silk_profile(object):
 
     def _silk_installed(self):
         app_installed = 'silk' in settings.INSTALLED_APPS
-        middleware_installed = 'silk.middleware.SilkyMiddleware' in settings.MIDDLEWARE_CLASSES
-        if django.VERSION[:2] >= (1, 10):
-            middleware_installed = middleware_installed or 'silk.middleware.SilkyMiddleware' in settings.MIDDLEWARE
+        middleware_installed = 'silk.middleware.SilkyMiddleware' in getattr(settings, 'MIDDLEWARE', [])
+        if django.VERSION[0] < 2:
+            middleware_installed = middleware_installed or 'silk.middleware.SilkyMiddleware' in getattr(settings, 'MIDDLEWARE_CLASSES', [])
         return app_installed and middleware_installed
 
     def _should_profile(self):
